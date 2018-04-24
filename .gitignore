@@ -1,1 +1,3 @@
-$GIT_DIR/venv
+venv
+.idea
+__pycache__
