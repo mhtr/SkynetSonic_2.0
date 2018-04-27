@@ -20,5 +20,4 @@ def stopBackward():
 def jump():
 
     pyautogui.keyDown('k')
-    #time.sleep()
     pyautogui.keyUp('k')

@@ -1,12 +1,14 @@
 import win32gui
 import pyautogui
 from PIL import ImageGrab
-from tkinter import *
+from tkinter import Canvas, Tk
 from PIL import ImageTk
+
 
 def setFocus(name):
     handle = win32gui.FindWindow(name, None)
     win32gui.SetForegroundWindow(handle)
+
 
 def printScr():
     pyautogui.keyDown('alt')
@@ -14,6 +16,7 @@ def printScr():
     pyautogui.keyUp('prtsc')
     pyautogui.keyUp('alt')
     return ImageGrab.grabclipboard()
+
 
 def createWindow(img):
     width = img.width
