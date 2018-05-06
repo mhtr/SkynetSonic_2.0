@@ -27,7 +27,9 @@ def search():
 
     print(sprite[0].size)
     flag = False
-    a = time.clock()
+    log = ''
+    log2 = ''
+    tim = time.clock()
     for spr in sprite:
         sprite_width = spr.size[0]
         sprite_height = spr.size[1]
@@ -38,7 +40,7 @@ def search():
                 total_pixel = 0
                 found_pixel = 0
 
-                print('Search in: {}:{}'.format(screened_img_pixel_w, screened_img_pixel_h))
+                #print('Search in: {}:{}'.format(screened_img_pixel_w, screened_img_pixel_h))
                 for sprite_pixel_w in range(0, sprite_width, 4):
                     for sprite_pixel_h in range(0, sprite_height, 4):
                         total_pixel = total_pixel + 1
@@ -51,16 +53,20 @@ def search():
                             if (((big_a - 10) < a < (big_a + 10)) and ((big_b - 10) < b < (big_b + 10)) and (
                                     (big_c - 10) < c < (big_c + 10))):
                                 found_pixel = found_pixel + 1
-                print('{}'.format(found_pixel))
+                #print('{}'.format(found_pixel))
                 if float(found_pixel) / float(total_pixel) > 0.12:
-                    print('Succefull {}, {}'.format(screened_img_pixel_w, screened_img_pixel_h))
+                    log = 'Succefull {}, {}'.format(screened_img_pixel_w, screened_img_pixel_h)
+                    print(log)
                     detected.rectangle((screened_img_pixel_w, screened_img_pixel_h, sprite_width + screened_img_pixel_w,
                                         sprite_height + screened_img_pixel_h), outline='red')
-                    print(time.clock())
+                    log2 = 'Detected in {} sec'.format(round(time.clock() - tim, 4))
+                    print(log2)
                     flag = True
                     break
             if flag:
                 break
         if flag:
             break
-    window.createWindow(screened_img)
+   # window.createWindow(screened_img)
+
+    return screened_img, log, log2
