@@ -1,46 +1,28 @@
-import win32gui
-import pyautogui
+import numpy as np
 from PIL import ImageGrab
-from tkinter import Canvas, Tk, Text
-from PIL import ImageTk
+import cv2
+import time
 import search
 
 
-def setFocus(name):
-    handle = win32gui.FindWindow(name, None)
-    win32gui.SetForegroundWindow(handle)
+def process_img(image):
+    # convert to gray
+    processed_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # edge detection
+    processed_img = cv2.Canny(processed_img, threshold1=200, threshold2=300)
+    return processed_img
 
 
-def printScr():
-    pyautogui.keyDown('alt')
-    pyautogui.keyDown('prtsc')
-    pyautogui.keyUp('prtsc')
-    pyautogui.keyUp('alt')
-    return ImageGrab.grabclipboard()
+def main():
+    for i in list(range(4))[::-1]:
+        print(i + 1)
+        time.sleep(1)
 
-
-class Redraw:
-    def __init__(self, img):
-        self.width = img.width
-        self.height = img.height
-        self.root = Tk()
-        self.root.geometry('{}x{}'.format(self.width, self.height + 50))
-        self.canvas = Canvas(self.root, width=self.width, height=self.height)
-        self.canvas.pack()
-        image = ImageTk.PhotoImage(img)
-        self.imgarea = self.canvas.create_image(self.width / 2, self.height / 2, image=image)
-        self.tx = Text(font=('times', 12), width=50, height=15)
-        self.tx.pack()
-
-
-
-    def updateImage(self, img):
-        image = ImageTk.PhotoImage(img[0])
-        self.canvas.itemconfig(self.imgarea, image=image)
-        self.tx.insert(1.0, '{}\n{}\n'.format(img[1], img[2]))
-        self.root.update()
-        #self.root.mainloop()
-
-    def mainLoop(self):
-        while True:
-            self.canvas.after(0, self.updateImage(search.search()))
+    while True:
+        screen = np.array(ImageGrab.grab(bbox=(0, 100, 640, 550)))
+        # new_screen = process_img(screen)
+        # cv2.imshow('window', new_screen)
+        cv2.imshow('window', search.search(cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)))
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            break
